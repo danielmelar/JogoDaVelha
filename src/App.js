@@ -28,26 +28,26 @@ export default function App(){
   // indica qunado o jogo iniciar
   const jogoInicial=[['','',''],['','',''],['','','']]
   const[jogo, setJogo]=useState([['','',''],['','',''],['','','']])
-  const[simboloAtual, setSimbolo] = useState('x')
+  const[simboloAtual, setSimbolo] = useState('X')
   const [jogando, setJogando]=useState(true)
 
   const tabuleiro=(j)=>{
     return(
       <div style={tabu}>
         <div style={tabuLinha}>
-          <div style={casa} casa-pos='00' onClick=''>{j[0][0]}</div>
-          <div style={casa} casa-pos='01' onClick=''>{j[0][1]}</div>
-          <div style={casa} casa-pos='02' onClick=''>{j[0][2]}</div>
+          <div style={casa} casa-pos='00' onClick={(e)=> joga(e)}>{j[0][0]}</div>
+          <div style={casa} casa-pos='01' onClick={(e)=> joga(e)}>{j[0][1]}</div>
+          <div style={casa} casa-pos='02' onClick={(e)=> joga(e)}>{j[0][2]}</div>
         </div>
         <div style={tabuLinha}>
-          <div style={casa} casa-pos='10' onClick=''>{j[1][0]}</div>
-          <div style={casa} casa-pos='11' onClick=''>{j[1][1]}</div>
-          <div style={casa} casa-pos='12' onClick=''>{j[1][2]}</div>
+          <div style={casa} casa-pos='10' onClick={(e)=> joga(e)}>{j[1][0]}</div>
+          <div style={casa} casa-pos='11' onClick={(e)=> joga(e)}>{j[1][1]}</div>
+          <div style={casa} casa-pos='12' onClick={(e)=> joga(e)}>{j[1][2]}</div>
         </div>
         <div style={tabuLinha}>
-          <div style={casa} casa-pos='20' onClick=''>{j[2][0]}</div>
-          <div style={casa} casa-pos='21' onClick=''>{j[2][1]}</div>
-          <div style={casa} casa-pos='22' onClick=''>{j[2][2]}</div>
+          <div style={casa} casa-pos='20' onClick={(e)=> joga(e)}>{j[2][0]}</div>
+          <div style={casa} casa-pos='21' onClick={(e)=> joga(e)}>{j[2][1]}</div>
+          <div style={casa} casa-pos='22' onClick={(e)=> joga(e)}>{j[2][2]}</div>
         </div>
       </div>
     )
@@ -77,40 +77,38 @@ export default function App(){
     }
 
     // colunas
-    for(let c=0;c<0;c++){
+    for(let c=0;c<3;c++){
       pontos=0
       for(let l=0;l<3;l++){
         if(jogo[l][c] == simboloAtual){
           pontos++
         } 
       }
-      if(pontos>3){
+      if(pontos>=3){
         vitoria=true
-        break 
+        break
       }
     }
     
-    // digagonais
+    // diagonais
     pontos=0
     for(let d=0;d<3;d++){
-      if(jogo[d][d]  == simboloAtual){
+      if(jogo[d][d] == simboloAtual){
           pontos++
-        } 
       }
-    
-    if(pontos>3){
+    }
+    if(pontos>=3){
       vitoria=true
-      }
+    }
     pontos=0
     let l=0
-    for(let c=2;c>=2;c--){
+    for(let c=2;c>=0;c--){
       if(jogo[l][c] == simboloAtual){
         pontos++
-      
       }
       l++
     }
-    if(pontos>3){
+    if(pontos>=3){
       vitoria=true
     }
     return vitoria
@@ -119,10 +117,11 @@ export default function App(){
   const trocaJogador=()=>{
     simboloAtual =='X'?setSimbolo('O'):setSimbolo('X')
   }
+  
 
   const retPos=(e)=>{
-    const p=e.target.getAttribute('data-pos')
-    const pos=[parseInt(e.substring(0,1)), parseInt(p.substring(1,2))]
+    const p=e.target.getAttribute('casa-pos')
+    const pos=[parseInt(p.substring(0,1)), parseInt(p.substring(1,2))]
 
     return pos
   }
@@ -138,7 +137,7 @@ export default function App(){
   const joga=(e)=>{
     if(jogando){
       if(verificaEspacoVazio(e)){
-        jogo[retPos(e)[0], retPos(e)[1]]=simboloAtual
+        jogo[retPos(e)[0]][retPos(e)[1]]=simboloAtual
         trocaJogador()
         if(verificaVitoria()){
           trocaJogador()
@@ -159,7 +158,15 @@ export default function App(){
 
   return(
     <>
-      {tabuleiro(jogoInicial)}
+      <div>
+        <p>Quem joga: {simboloAtual}</p>
+      </div>
+      <div>
+        {tabuleiro(jogo)}
+      </div>
+      <div>
+        {ButtonJogarNovamente()}
+      </div>
     </>
   )
 }
