@@ -1,5 +1,7 @@
 import React, {useState} from 'react'
 
+let contaPos = 0
+
 export default function App(){
 
   // ESTILOS
@@ -53,9 +55,21 @@ export default function App(){
     )
   }
 
-  const ButtonJogarNovamente=()=>{
+  const botaoJogarNovamente=()=>{
     if(!jogando){
       return <button onClick={()=> reiniciar()}>Jogar Novamente</button>
+    }
+  }
+
+  // verifica empate
+  const verificaEmpate=()=>{
+    contaPos++
+    let vitoria = false
+    console.log('Campos preenchidos: '+ contaPos)
+    if(contaPos >= 9){
+      contaPos = 0
+      alert('Jogo Empatado!')
+      botaoJogarNovamente(setJogando(false))
     }
   }
 
@@ -111,6 +125,8 @@ export default function App(){
     if(pontos>=3){
       vitoria=true
     }
+    
+    
     return vitoria
   }
 
@@ -148,6 +164,7 @@ export default function App(){
         alert('Campo não disponivel')
       }
     }
+    verificaEmpate()
   }
 
   const reiniciar=()=>{
@@ -165,7 +182,7 @@ export default function App(){
         {tabuleiro(jogo)}
       </div>
       <div>
-        {ButtonJogarNovamente()}
+        {botaoJogarNovamente()}
       </div>
     </>
   )
